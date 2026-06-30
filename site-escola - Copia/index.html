@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Escola Conecta · Avisos e Calendário</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f8fafc;
+    }
+    .aviso-item {
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .aviso-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+    }
+    .filter-btn.active {
+      background: #1e293b;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transform: translateY(-1px);
+    }
+    .nav-btn.active {
+      background: rgba(255,255,255,0.2);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.4);
+    }
+    .hidden-section {
+      display: none;
+    }
+    .visible-section {
+      display: block;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50">
+
+  <!-- Cabeçalho com navegação real -->
+  <header class="bg-gradient-to-r from-blue-800 to-indigo-800 text-white shadow-lg sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-2xl backdrop-blur-sm">📘</div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Escola Conecta</h1>
+          <p class="text-xs sm:text-sm text-blue-100">Do 6º EF ao 3º EM · 500 alunos</p>
+        </div>
+      </div>
+      <!-- Navegação com botões clicáveis -->
+      <nav class="flex gap-2 text-sm font-medium" id="main-nav">
+        <button class="nav-btn active px-3 py-1.5 bg-white/10 rounded-full backdrop-blur-sm hover:bg-white/20 transition" data-section="home">Início</button>
+        <button class="nav-btn px-3 py-1.5 bg-white/10 rounded-full backdrop-blur-sm hover:bg-white/20 transition" data-section="calendario">Calendário</button>
+        <button class="nav-btn px-3 py-1.5 bg-white/10 rounded-full backdrop-blur-sm hover:bg-white/20 transition" data-section="avisos">Avisos</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-7xl mx-auto w-full px-4 py-8 sm:px-6 lg:px-8" id="app-root">
+    
+    <!-- SEÇÃO HOME (lista de avisos) – também usada como "Avisos" -->
+    <section id="home-section" class="visible-section">
+      <div class="mb-8">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-800 tracking-tight">📢 Avisos escolares</h2>
+        <p class="text-gray-500 mt-2">Filtre por ano e clique no card para ver detalhes completos.</p>
+      </div>
+
+      <!-- Botões de filtro -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3 mb-8" id="filtro-container">
+        <button class="filter-btn active px-4 py-2 rounded-full text-sm font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all shadow-sm" data-filter="todos">Todos</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all shadow-sm" data-filter="ano-6">6º EF</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all shadow-sm" data-filter="ano-7">7º EF</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all shadow-sm" data-filter="ano-8">8º EF</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all shadow-sm" data-filter="ano-9">9º EF</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all shadow-sm" data-filter="ano-em1">1º EM</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all shadow-sm" data-filter="ano-em2">2º EM</button>
+        <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all shadow-sm" data-filter="ano-em3">3º EM</button>
+      </div>
+
+      <!-- Grade de avisos -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="avisos-grid">
+        <!-- Card 6º EF -->
+        <div class="aviso-item ano-6 bg-white rounded-2xl shadow-md overflow-hidden flex flex-col" data-detail-id="6ano">
+          <div class="p-5 flex flex-col flex-grow">
+            <span class="text-xs font-semibold text-teal-600 bg-teal-50 px-3 py-1 rounded-full self-start mb-3">6º EF</span>
+            <h3 class="text-lg font-bold text-gray-800 mb-1">Novos horários de aula</h3>
+            <p class="text-sm text-gray-500 mb-3 flex items-center gap-1">📅 20/03/2026</p>
+            <p class="text-gray-600 text-sm flex-grow">A partir de abril, aulas no período da tarde.</p>
+          </div>
+        </div>
+
+        <!-- Card 7º EF -->
+        <div class="aviso-item ano-7 bg-white rounded-2xl shadow-md overflow-hidden flex flex-col" data-detail-id="7ano">
+          <div class="p-5 flex flex-col flex-grow">
+            <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full self-start mb-3">7º EF</span>
+            <h3 class="text-lg font-bold text-gray-800 mb-1">Olimpíada de Matemática</h3>
+            <p class="text-sm text-gray-500 mb-3 flex items-center gap-1">📅 25/03/2026</p>
+            <p class="text-gray-600 text-sm flex-grow">Inscrições abertas até 18/03.</p>
+          </div>
+        </div>
+
+        <!-- Card 8º EF -->
+        <div class="aviso-item ano-8 bg-white rounded-2xl shadow-md overflow-hidden flex flex-col" data-detail-id="8ano">
+          <div class="p-5 flex flex-col flex-grow">
+            <span class="text-xs font-semibold text-purple-600 bg-purple-50 px-3 py-1 rounded-full self-start mb-3">8º EF</span>
+            <h3 class="text-lg font-bold text-gray-800 mb-1">Projeto interdisciplinar</h3>
+            <p class="text-sm text-gray-500 mb-3 flex items-center gap-1">📅 01/04/2026</p>
+            <p class="text-gray-600 text-sm flex-grow">Tema: Meio ambiente e tecnologia.</p>
+          </div>
+        </div>
+
+        <!-- Card 9º EF -->
+        <div class="aviso-item ano-9 bg-white rounded-2xl shadow-md overflow-hidden flex flex-col" data-detail-id="9ano">
+          <div class="p-5 flex flex-col flex-grow">
+            <span class="text-xs font-semibold text-orange-600 bg-orange-50 px-3 py-1 rounded-full self-start mb-3">9º EF</span>
+            <h3 class="text-lg font-bold text-gray-800 mb-1">Simulado preparatório</h3>
+            <p class="text-sm text-gray-500 mb-3 flex items-center gap-1">📅 08/04/2026</p>
+            <p class="text-gray-600 text-sm flex-grow">Simulado online no contraturno.</p>
+          </div>
+        </div>
+
+        <!-- Card 1º EM -->
+        <div class="aviso-item ano-em1 bg-white rounded-2xl shadow-md overflow-hidden flex flex-col" data-detail-id="em1">
+          <div class="p-5 flex flex-col flex-grow">
+            <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full self-start mb-3">1º EM</span>
+            <h3 class="text-lg font-bold text-gray-800 mb-1">Orientação profissional</h3>
+            <p class="text-sm text-gray-500 mb-3 flex items-center gap-1">📅 12/04/2026</p>
+            <p class="text-gray-600 text-sm flex-grow">Palestra com psicóloga sobre carreiras.</p>
+          </div>
+        </div>
+
+        <!-- Card 2º EM -->
+        <div class="aviso-item ano-em2 bg-white rounded-2xl shadow-md overflow-hidden flex flex-col" data-detail-id="em2">
+          <div class="p-5 flex flex-col flex-grow">
+            <span class="text-xs font-semibold text-green-600 bg-green-50 px-3 py-1 rounded-full self-start mb-3">2º EM</span>
+            <h3 class="text-lg font-bold text-gray-800 mb-1">Inscrição ENEM 2026</h3>
+            <p class="text-sm text-gray-500 mb-3 flex items-center gap-1">📅 05/05/2026</p>
+            <p class="text-gray-600 text-sm flex-grow">Inscrição coletiva. RG e CPF até 25/04.</p>
+          </div>
+        </div>
+
+        <!-- Card 3º EM -->
+        <div class="aviso-item ano-em3 bg-white rounded-2xl shadow-md overflow-hidden flex flex-col" data-detail-id="em3">
+          <div class="p-5 flex flex-col flex-grow">
+            <span class="text-xs font-semibold text-red-600 bg-red-50 px-3 py-1 rounded-full self-start mb-3">3º EM</span>
+            <h3 class="text-lg font-bold text-gray-800 mb-1">Formatura e baile</h3>
+            <p class="text-sm text-gray-500 mb-3 flex items-center gap-1">📅 20/05/2026</p>
+            <p class="text-gray-600 text-sm flex-grow">Comissão se reúne sexta-feira.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO CALENDÁRIO DE EVENTOS -->
+    <section id="calendario-section" class="hidden-section">
+      <div class="mb-8">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-800 tracking-tight">📅 Calendário de eventos</h2>
+        <p class="text-gray-500 mt-2">Fique por dentro dos próximos eventos da escola.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Evento 1 -->
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+          <div class="h-40 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=300&fit=crop');"></div>
+          <div class="p-5">
+            <span class="text-xs font-semibold text-pink-600 bg-pink-50 px-3 py-1 rounded-full">Interclasse</span>
+            <h3 class="text-lg font-bold text-gray-800 mt-2">Torneio de futsal</h3>
+            <p class="text-sm text-gray-500 mt-1">📅 10/04/2026 • 8h às 17h</p>
+            <p class="text-gray-600 text-sm mt-2">Disputa entre turmas do 6º EF ao 3º EM. Inscrições até 05/04.</p>
+          </div>
+        </div>
+
+        <!-- Evento 2 -->
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+          <div class="h-40 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&h=300&fit=crop');"></div>
+          <div class="p-5">
+            <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Palestra</span>
+            <h3 class="text-lg font-bold text-gray-800 mt-2">Saúde mental na adolescência</h3>
+            <p class="text-sm text-gray-500 mt-1">📅 15/04/2026 • 10h</p>
+            <p class="text-gray-600 text-sm mt-2">Com a psicóloga Dra. Ana Costa. Aberto a alunos e responsáveis.</p>
+          </div>
+        </div>
+
+        <!-- Evento 3 -->
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+          <div class="h-40 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&h=300&fit=crop');"></div>
+          <div class="p-5">
+            <span class="text-xs font-semibold text-green-600 bg-green-50 px-3 py-1 rounded-full">Cultural</span>
+            <h3 class="text-lg font-bold text-gray-800 mt-2">Feira de Ciências e Arte</h3>
+            <p class="text-sm text-gray-500 mt-1">📅 28/04/2026 • 9h às 16h</p>
+            <p class="text-gray-600 text-sm mt-2">Exposição de projetos dos alunos. Visitação aberta à comunidade.</p>
+          </div>
+        </div>
+
+        <!-- Evento 4 -->
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+          <div class="h-40 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1517486808906-6ca8b3f8e1c1?w=600&h=300&fit=crop');"></div>
+          <div class="p-5">
+            <span class="text-xs font-semibold text-orange-600 bg-orange-50 px-3 py-1 rounded-full">Reunião</span>
+            <h3 class="text-lg font-bold text-gray-800 mt-2">Reunião de pais e mestres</h3>
+            <p class="text-sm text-gray-500 mt-1">📅 05/05/2026 • 19h</p>
+            <p class="text-gray-600 text-sm mt-2">Entrega de boletins e discussão pedagógica. Auditório principal.</p>
+          </div>
+        </div>
+
+        <!-- Evento 5 -->
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+          <div class="h-40 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1544928147-79a2dbc1f389?w=600&h=300&fit=crop');"></div>
+          <div class="p-5">
+            <span class="text-xs font-semibold text-red-600 bg-red-50 px-3 py-1 rounded-full">Esportivo</span>
+            <h3 class="text-lg font-bold text-gray-800 mt-2">Corrida de confraternização</h3>
+            <p class="text-sm text-gray-500 mt-1">📅 20/05/2026 • 7h</p>
+            <p class="text-gray-600 text-sm mt-2">5 km abertos a alunos, pais e funcionários. Inscrições gratuitas.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO DETALHES DO AVISO -->
+    <section id="detalhes-section" class="hidden-section">
+      <button id="btn-voltar" class="mb-6 inline-flex items-center gap-2 text-blue-700 hover:text-blue-900 font-medium transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Voltar para avisos
+      </button>
+      <div id="detalhes-conteudo" class="bg-white rounded-2xl shadow-lg p-6 sm:p-8"></div>
+    </section>
+  </main>
+
+  <script>
+    (function() {
+      // ----- DADOS DETALHADOS DE AVISOS (mesmo objeto de antes) -----
+      const detalhesAvisos = {
+        '6ano': {
+          titulo: 'Novos horários de aula – 6º EF',
+          data: '20/03/2026',
+          textoCompleto: 'A partir do mês de abril, todas as turmas do 6º EF passarão a ter aulas no período da tarde, das 13h às 18h20. A mudança visa melhor aproveitamento dos laboratórios e salas temáticas. Os responsáveis receberão comunicado oficial por e-mail e via aplicativo da escola. Dúvidas podem ser esclarecidas na secretaria.',
+          imagens: [
+            'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&h=400&fit=crop'
+          ],
+          videos: [
+            'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ',
+            'https://www.youtube-nocookie.com/embed/9bZkp7q19f0'
+          ]
+        },
+        '7ano': {
+          titulo: 'Olimpíada de Matemática – 7º EF',
+          data: '25/03/2026',
+          textoCompleto: 'Estão abertas as inscrições para a Olimpíada Interna de Matemática. Alunos do 7º EF interessados devem procurar o professor da disciplina até o dia 18/03. A competição será em duas fases: uma online e uma presencial no auditório. Haverá premiação com medalhas e certificados.',
+          imagens: ['https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&h=400&fit=crop'],
+          videos: []
+        },
+        '8ano': {
+          titulo: 'Projeto interdisciplinar – 8º EF',
+          data: '01/04/2026',
+          textoCompleto: 'O tema deste ano é "Meio ambiente e tecnologia". Os alunos serão divididos em grupos para desenvolver maquetes, aplicativos simples e campanhas de conscientização. A apresentação final ocorrerá na Feira de Ciências e Tecnologia em maio. Início das atividades: 01/04.',
+          imagens: [
+            'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&h=400&fit=crop'
+          ],
+          videos: ['https://www.youtube-nocookie.com/embed/LXb3EKWsInQ']
+        },
+        '9ano': {
+          titulo: 'Simulado preparatório – 9º EF',
+          data: '08/04/2026',
+          textoCompleto: 'O simulado online será aplicado no contraturno escolar, abrangendo as disciplinas de Língua Portuguesa, Matemática, Ciências e Inglês. O link de acesso será enviado para o e-mail institucional de cada aluno. Resultados serão usados para nivelamento e apoio pedagógico.',
+          imagens: [],
+          videos: ['https://www.youtube-nocookie.com/embed/3JZ_D3ELwOQ']
+        },
+        'em1': {
+          titulo: 'Orientação profissional – 1º EM',
+          data: '12/04/2026',
+          textoCompleto: 'A psicóloga escolar realizará uma palestra sobre carreiras, testes vocacionais e mercado de trabalho. Presença obrigatória para todos os alunos do 1º EM. Haverá dinâmicas de grupo e momento para perguntas. Acontecerá no auditório às 10h.',
+          imagens: ['https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&h=400&fit=crop'],
+          videos: []
+        },
+        'em2': {
+          titulo: 'Inscrição ENEM 2026 – 2º EM',
+          data: '05/05/2026',
+          textoCompleto: 'A escola realizará a inscrição coletiva dos alunos do 2º EM no Exame Nacional do Ensino Médio. Para participar, é necessário entregar cópia do RG e CPF até 25/04 na secretaria. Alunos que não desejarem fazer a prova devem comunicar formalmente.',
+          imagens: ['https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&h=400&fit=crop'],
+          videos: []
+        },
+        'em3': {
+          titulo: 'Formatura e baile – 3º EM',
+          data: '20/05/2026',
+          textoCompleto: 'A comissão de formatura se reunirá nesta sexta-feira às 18h para definir detalhes do baile, becas e convites. Todos os formandos estão convidados a participar. As decisões serão compartilhadas no grupo oficial da turma. Contamos com a presença de todos!',
+          imagens: [
+            'https://images.unsplash.com/photo-1523050854058-8df90110fa8c?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&h=400&fit=crop'
+          ],
+          videos: ['https://www.youtube-nocookie.com/embed/3JZ_D3ELwOQ', 'https://www.youtube-nocookie.com/embed/LXb3EKWsInQ']
+        }
+      };
+
+      // ----- ELEMENTOS DO DOM -----
+      const secaoHome = document.getElementById('home-section');
+      const secaoCalendario = document.getElementById('calendario-section');
+      const secaoDetalhes = document.getElementById('detalhes-section');
+      const conteudoDetalhes = document.getElementById('detalhes-conteudo');
+      const btnVoltar = document.getElementById('btn-voltar');
+      const botoesNavegacao = document.querySelectorAll('.nav-btn');
+      const botoesFiltro = document.querySelectorAll('.filter-btn');
+      const avisos = document.querySelectorAll('.aviso-item');
+
+      // Estado: qual seção estava ativa antes de abrir detalhes
+      let secaoAnterior = 'home'; // 'home' ou 'calendario'
+
+      // ----- FUNÇÕES DE NAVEGAÇÃO PRINCIPAL -----
+      function mostrarSecao(secao) {
+        // Esconde todas as seções principais
+        secaoHome.classList.add('hidden-section');
+        secaoCalendario.classList.add('hidden-section');
+        secaoDetalhes.classList.add('hidden-section');
+        secaoHome.classList.remove('visible-section');
+        secaoCalendario.classList.remove('visible-section');
+        secaoDetalhes.classList.remove('visible-section');
+
+        if (secao === 'home' || secao === 'avisos') {
+          secaoHome.classList.remove('hidden-section');
+          secaoHome.classList.add('visible-section');
+          secaoAnterior = 'home';
+          // Ativar botão correspondente na navegação
+          setActiveNavButton('home');
+        } else if (secao === 'calendario') {
+          secaoCalendario.classList.remove('hidden-section');
+          secaoCalendario.classList.add('visible-section');
+          secaoAnterior = 'calendario';
+          setActiveNavButton('calendario');
+        }
+        // 'detalhes' é tratado separadamente
+      }
+
+      function mostrarDetalhes(id) {
+        const dados = detalhesAvisos[id];
+        if (!dados) return;
+
+        // Guarda a seção atual antes de abrir detalhes
+        if (secaoHome.classList.contains('visible-section')) {
+          secaoAnterior = 'home';
+        } else if (secaoCalendario.classList.contains('visible-section')) {
+          secaoAnterior = 'calendario';
+        }
+
+        // Construir HTML dos detalhes
+        let html = `
+          <div class="mb-6">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">${dados.titulo}</h2>
+            <p class="text-gray-500 mt-1 flex items-center gap-2">📅 ${dados.data}</p>
+          </div>
+          <div class="prose max-w-none text-gray-700 mb-6">
+            <p class="whitespace-pre-line">${dados.textoCompleto}</p>
+          </div>
+        `;
+
+        if (dados.imagens && dados.imagens.length > 0) {
+          html += '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">';
+          dados.imagens.forEach(url => {
+            html += `
+              <div class="rounded-xl overflow-hidden shadow-md">
+                <img src="${url}" alt="Imagem do aviso" class="w-full h-48 object-cover" loading="lazy">
+              </div>
+            `;
+          });
+          html += '</div>';
+        }
+
+        if (dados.videos && dados.videos.length > 0) {
+          html += '<div class="space-y-4">';
+          html += '<h3 class="text-xl font-semibold text-gray-800">🎥 Vídeos relacionados</h3>';
+          dados.videos.forEach(url => {
+            html += `
+              <div class="aspect-video w-full rounded-xl overflow-hidden shadow-md bg-gray-100">
+                <iframe class="w-full h-full" src="${url}" title="Vídeo do aviso" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+              </div>
+            `;
+          });
+          html += '</div>';
+        }
+
+        conteudoDetalhes.innerHTML = html;
+
+        // Alternar para seção detalhes
+        secaoHome.classList.add('hidden-section');
+        secaoCalendario.classList.add('hidden-section');
+        secaoDetalhes.classList.remove('hidden-section');
+        secaoDetalhes.classList.add('visible-section');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function voltarParaSecaoAnterior() {
+        secaoDetalhes.classList.add('hidden-section');
+        secaoDetalhes.classList.remove('visible-section');
+        if (secaoAnterior === 'calendario') {
+          secaoCalendario.classList.remove('hidden-section');
+          secaoCalendario.classList.add('visible-section');
+        } else {
+          secaoHome.classList.remove('hidden-section');
+          secaoHome.classList.add('visible-section');
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function setActiveNavButton(secao) {
+        botoesNavegacao.forEach(btn => {
+          const dataSec = btn.dataset.section;
+          if (dataSec === secao || (secao === 'home' && dataSec === 'avisos')) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+      }
+
+      // ----- FILTRO DOS AVISOS -----
+      function ativarBotaoFiltro(botaoAtivo) {
+        botoesFiltro.forEach(btn => btn.classList.remove('active'));
+        botaoAtivo.classList.add('active');
+      }
+
+      function filtrarAvisos(filtro) {
+        avisos.forEach(aviso => {
+          if (filtro === 'todos') {
+            aviso.classList.remove('hidden');
+          } else {
+            aviso.classList.toggle('hidden', !aviso.classList.contains(filtro));
+          }
+        });
+      }
+
+      // ----- EVENT LISTENERS -----
+      // Navegação do cabeçalho
+      botoesNavegacao.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const secao = this.dataset.section;
+          if (secao === 'home' || secao === 'avisos') {
+            mostrarSecao('home');
+          } else if (secao === 'calendario') {
+            mostrarSecao('calendario');
+          }
+        });
+      });
+
+      // Clique nos cards de aviso
+      avisos.forEach(card => {
+        card.addEventListener('click', function(e) {
+          const id = this.dataset.detailId;
+          if (id) mostrarDetalhes(id);
+        });
+      });
+
+      // Botão voltar (detalhes)
+      btnVoltar.addEventListener('click', voltarParaSecaoAnterior);
+
+      // Botões de filtro
+      botoesFiltro.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const filtro = this.dataset.filter;
+          ativarBotaoFiltro(this);
+          filtrarAvisos(filtro);
+        });
+      });
+
+      // Inicialização: mostrar home e ativar "Início" no nav
+      mostrarSecao('home');
+      filtrarAvisos('todos');
+    })();
+  </script>
+</body>
+</html>
