@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E. E. Hans Grudzinski</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d1b3e;
+            --primary-light: #1a3366;
+            --secondary: #1a5c8a;
+            --accent: #e8a817;
+            --accent-hover: #c98d0f;
+            --light-bg: #f0f4f8;
+            --white: #ffffff;
+            --text: #2c3e50;
+            --text-light: #5a6c7d;
+            --border: #dde4ed;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow: 0 4px 20px rgba(0,0,0,0.10);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+            --font-heading: 'Merriweather', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: var(--font-body);
+            background-color: #eef2f7;
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .floating-buttons {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1500;
+        }
+        .floating-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.6rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        .floating-btn:hover { transform: scale(1.1); box-shadow: 0 10px 28px rgba(0,0,0,0.35); }
+        .whatsapp-btn { background: #25D366; }
+        .instagram-btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+
+        .header {
+            background: linear-gradient(135deg, #0d1b3e 0%, #132b5c 30%, #0f2247 100%);
+            color: #fff;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+        }
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            gap: 12px;
+        }
+        .logo-area { display: flex; align-items: center; gap: 14px; cursor: pointer; flex-shrink: 0; }
+        .logo-icon {
+            width: 48px; height: 48px; background: var(--accent); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 900; color: #0d1b3e;
+            flex-shrink: 0; font-family: var(--font-heading);
+        }
+        .logo-text h1 {
+            font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;
+            letter-spacing: -0.3px; line-height: 1.2; white-space: nowrap;
+        }
+        .logo-text span {
+            font-size: 0.7rem; font-weight: 400; opacity: 0.85;
+            letter-spacing: 1px; text-transform: uppercase; display: block;
+        }
+
+        .desktop-nav { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; justify-content: flex-end; }
+        .nav-group { display: flex; gap: 4px; align-items: center; }
+        .nav-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.2); margin: 0 4px; border-radius: 1px; }
+        .nav-btn {
+            padding: 7px 11px; border: 1.5px solid transparent;
+            background: rgba(255,255,255,0.06); color: #e0e6f0;
+            border-radius: 20px; cursor: pointer; font-size: 0.78rem; font-weight: 500;
+            transition: var(--transition); white-space: nowrap; letter-spacing: 0.2px;
+            font-family: var(--font-body);
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.3); }
+        .nav-btn.active { background: var(--accent); color: #0d1b3e; border-color: var(--accent); font-weight: 700; box-shadow: 0 4px 12px rgba(232,168,23,0.4); }
+        .nav-btn.turma-btn { background: rgba(255,255,255,0.03); font-size: 0.72rem; padding: 6px 10px; }
+        .nav-btn.turma-btn.active { background: #2e6eb5; color: #fff; border-color: #4d8fd4; font-weight: 700; }
+        .nav-btn.special-btn { background: rgba(255,255,255,0.08); font-weight: 600; border: 1.5px solid rgba(255,255,255,0.2); padding: 7px 13px; }
+        .nav-btn.special-btn.active { background: var(--accent); color: #0d1b3e; border-color: var(--accent); }
+        .nav-btn.comp-btn { background: #2c3e50; color: #fff; border-color: #4a6278; font-weight: 600; }
+        .nav-btn.comp-btn:hover { background: #3d5166; border-color: #5a7a94; }
+        .nav-btn.comp-btn.active { background: #fff; color: #2c3e50; border-color: #fff; }
+
+        .mobile-toggle { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 6px; border-radius: 6px; }
+        .mobile-toggle:hover { background: rgba(255,255,255,0.1); }
+        .mobile-menu {
+            display: none; position: fixed; top: 0; right: -100%; width: 85%; max-width: 400px;
+            height: 100vh; background: #0d1b3e; z-index: 2000; transition: right 0.35s;
+            overflow-y: auto; box-shadow: -8px 0 30px rgba(0,0,0,0.5); padding: 20px 16px;
+        }
+        .mobile-menu.open { right: 0; }
+        .mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1999; }
+        .mobile-overlay.show { display: block; }
+        .mobile-menu-close { background: none; border: none; color: #fff; font-size: 1.8rem; cursor: pointer; float: right; padding: 6px 10px; border-radius: 8px; }
+        .mobile-menu .mobile-nav-btn {
+            display: block; width: 100%; text-align: left; padding: 12px 16px; margin: 3px 0;
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            color: #d0d8e8; border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 500;
+            transition: var(--transition); font-family: var(--font-body);
+        }
+        .mobile-menu .mobile-nav-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+        .mobile-menu .mobile-nav-btn.active { background: var(--accent); color: #0d1b3e; font-weight: 700; border-color: var(--accent); }
+        .mobile-section-title { color: #8899bb; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin: 16px 0 6px 6px; font-weight: 700; }
+
+        .main-container { max-width: 1300px; margin: 0 auto; padding: 24px 20px; flex: 1; width: 100%; }
+        .content-section { display: none; animation: fadeSlideIn 0.45s ease forwards; }
+        .content-section.active { display: block; }
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-title { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 900; color: #0d1b3e; margin-bottom: 6px; }
+        .section-subtitle { color: var(--text-light); margin-bottom: 24px; font-size: 0.95rem; }
+        .section-header { margin-bottom: 28px; padding-bottom: 16px; border-bottom: 3px solid var(--accent); }
+
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .card {
+            background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border); transition: var(--transition); overflow: hidden;
+            display: flex; flex-direction: column; cursor: pointer;
+        }
+        .card:hover { box-shadow: var(--shadow); transform: translateY(-3px); border-color: #c8d6e5; }
+        .card-image {
+            width: 100%; height: 180px; background-size: cover; background-position: center;
+            background-color: #e0e7f0; flex-shrink: 0;
+        }
+        .card-body { padding: 20px 24px 24px; flex: 1; display: flex; flex-direction: column; }
+        .card-badge {
+            display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem;
+            font-weight: 700; letter-spacing: 0.5px; margin-bottom: 10px; text-transform: uppercase;
+            align-self: flex-start;
+        }
+        .badge-projeto { background: #e8f0fe; color: #1a5c8a; }
+        .badge-eletiva { background: #fef3e0; color: #b8780a; }
+        .badge-evento { background: #e8f5e9; color: #2e7d32; }
+        .badge-gestao { background: #f3e5f5; color: #6a1b9a; }
+        .badge-atividade { background: #d1ecf1; color: #0c5460; }
+        .badge-gremio { background: #fff3cd; color: #856404; }
+        .badge-boaspraticas { background: #d4edda; color: #155724; }
+        .card h3 { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: #1a1a2e; }
+        .card p { color: var(--text-light); font-size: 0.9rem; line-height: 1.6; margin-bottom: 12px; }
+        .card-link {
+            margin-top: auto; display: inline-flex; align-items: center; gap: 6px;
+            color: var(--secondary); font-weight: 600; text-decoration: none; font-size: 0.9rem;
+        }
+        .card-link:hover { color: #0d3b5e; text-decoration: underline; }
+        .card-image.circle {
+            width: 110px; height: 110px; border-radius: 50%; margin: 20px auto 10px;
+            background-size: cover; background-position: center; border: 4px solid var(--accent);
+        }
+
+        .photo-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin: 20px 0; }
+        .photo-placeholder {
+            aspect-ratio: 4/3; background: linear-gradient(135deg, #e0e7f0, #d0d8e4);
+            border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center;
+            flex-direction: column; gap: 8px; color: #8899aa; font-size: 0.85rem; cursor: pointer;
+            transition: var(--transition); border: 2px dashed #c0cdda; overflow: hidden;
+        }
+        .photo-placeholder.filled { border: 2px solid #c0cdda; background-size: cover; background-position: center; }
+
+        .video-container {
+            position: relative; width: 100%; aspect-ratio: 16/9; background: #1a1a2e;
+            border-radius: var(--radius); overflow: hidden; margin: 20px 0; box-shadow: var(--shadow);
+        }
+        .video-container iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+        .video-placeholder-box {
+            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            flex-direction: column; gap: 12px; background: #1a1a2e; color: #8899bb; cursor: pointer;
+        }
+        .video-placeholder-box i { font-size: 4rem; opacity: 0.5; }
+        .video-placeholder-box:hover i { opacity: 0.9; color: #e8a817; }
+
+        .text-block { background: var(--white); border-radius: var(--radius); padding: 28px 32px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); margin: 16px 0; }
+
+        .compensacao-download-area { background: var(--white); border-radius: var(--radius); padding: 28px 32px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); margin-bottom: 24px; }
+        .download-selector { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin: 16px 0; }
+        .download-selector select { padding: 12px 16px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 0.9rem; background: #fafbfc; min-width: 200px; }
+        .btn-download { padding: 12px 28px; background: #0d1b3e; color: #fff; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: var(--transition); font-family: var(--font-body); display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+        .btn-download:hover { background: #1a3366; box-shadow: var(--shadow); transform: translateY(-1px); }
+        .compensacao-table-wrap { overflow-x: auto; margin: 20px 0; border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
+        .compensacao-table { width: 100%; border-collapse: collapse; background: var(--white); font-size: 0.9rem; }
+        .compensacao-table th { background: #0d1b3e; color: #fff; padding: 14px 16px; text-align: left; font-weight: 600; white-space: nowrap; }
+        .compensacao-table td { padding: 12px 16px; border-bottom: 1px solid #eef1f5; }
+        .compensacao-table tr:hover td { background: #f8fafc; }
+
+        .footer { background: #0d1b3e; color: #a0b0cc; text-align: center; padding: 20px 24px; font-size: 0.85rem; margin-top: auto; }
+        .footer strong { color: #e0e6f0; }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7);
+            z-index: 3000; align-items: center; justify-content: center;
+            padding: 20px; overflow-y: auto;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-container {
+            background: #fff; border-radius: var(--radius); max-width: 900px; width: 100%;
+            max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative; animation: fadeInUp 0.3s ease;
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-close {
+            position: sticky; top: 12px; right: 12px; float: right;
+            background: var(--primary); color: #fff; border: none;
+            width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem;
+            cursor: pointer; z-index: 10; transition: var(--transition);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .modal-close:hover { background: #e74c3c; transform: rotate(90deg); }
+        .modal-header { padding: 28px 28px 16px; border-bottom: 1px solid var(--border); }
+        .modal-header h2 { font-family: var(--font-heading); font-size: 1.5rem; margin: 8px 0 0; }
+        .turma-selector { display: none; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+        .turma-selector.active { display: flex; }
+        .turma-opt {
+            padding: 8px 20px; border-radius: 20px; border: 2px solid var(--border);
+            background: #fff; cursor: pointer; font-weight: 600; font-size: 0.9rem;
+            transition: var(--transition); font-family: var(--font-body);
+        }
+        .turma-opt.active, .turma-opt:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .modal-body { padding: 20px 28px 28px; }
+        .modal-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .modal-gallery .photo-placeholder { aspect-ratio: 4/3; border: 2px dashed #c0cdda; cursor: default; }
+        .modal-video { margin-bottom: 20px; }
+        .modal-text { color: var(--text); line-height: 1.8; }
+
+        @media (max-width: 1200px) { .desktop-nav .nav-btn { padding: 6px 9px; font-size: 0.7rem; } }
+        @media (max-width: 1024px) {
+            .desktop-nav { display: none; } .mobile-toggle { display: block; } .mobile-menu { display: block; }
+            .header-inner { padding: 10px 14px; } .logo-text h1 { font-size: 1rem; } .logo-icon { width: 42px; height: 42px; font-size: 1.2rem; }
+            .section-title { font-size: 1.4rem; } .card-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+            .photo-gallery { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+            .floating-buttons { bottom: 16px; left: 16px; gap: 10px; } .floating-btn { width: 44px; height: 44px; font-size: 1.3rem; }
+        }
+        @media (max-width: 480px) {
+            .card-grid { grid-template-columns: 1fr; gap: 12px; } .photo-gallery { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .section-title { font-size: 1.2rem; } .floating-buttons { bottom: 12px; left: 12px; } .floating-btn { width: 40px; height: 40px; font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BOTÕES FLUTUANTES -->
+    <div class="floating-buttons">
+        <a href="https://wa.me/551145455601" target="_blank" class="floating-btn whatsapp-btn" title="Fale conosco pelo WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+        <a href="https://www.instagram.com/hansgrudzinski?igsh=eHNtZHc1MjFwcm82" target="_blank" class="floating-btn instagram-btn" title="Siga-nos no Instagram">
+            <i class="fa-brands fa-instagram"></i>
+        </a>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo-area" onclick="showSection('home')" title="Ir para o Início">
+                <div class="logo-icon">HG</div>
+                <div class="logo-text">
+                    <h1>E. E. Hans Grudzinski</h1>
+                    <span>Educação que transforma</span>
+                </div>
+            </div>
+
+            <nav class="desktop-nav" id="desktopNav">
+                <div class="nav-group">
+                    <button class="nav-btn turma-btn" data-section="projetos6" onclick="showSection('projetos6')">6ºEF</button>
+                    <button class="nav-btn turma-btn" data-section="projetos7" onclick="showSection('projetos7')">7ºEF</button>
+                    <button class="nav-btn turma-btn" data-section="projetos8" onclick="showSection('projetos8')">8ºEF</button>
+                    <button class="nav-btn turma-btn" data-section="projetos9" onclick="showSection('projetos9')">9ºEF</button>
+                    <button class="nav-btn turma-btn" data-section="projetos1em" onclick="showSection('projetos1em')">1ºEM</button>
+                    <button class="nav-btn turma-btn" data-section="projetos2em" onclick="showSection('projetos2em')">2ºEM</button>
+                    <button class="nav-btn turma-btn" data-section="projetos3em" onclick="showSection('projetos3em')">3ºEM</button>
+                </div>
+                <span class="nav-divider"></span>
+                <div class="nav-group">
+                    <button class="nav-btn special-btn" data-section="atividades" onclick="showSection('atividades')"><i class="fa-solid fa-lightbulb"></i>&nbsp;Atividades</button>
+                    <button class="nav-btn comp-btn" data-section="compensacoes" onclick="showSection('compensacoes')"><i class="fa-solid fa-clipboard-list"></i>&nbsp;Compensações</button>
+                    <button class="nav-btn special-btn" data-section="projetoslinks" onclick="showSection('projetoslinks')"><i class="fa-solid fa-link"></i>&nbsp;Projetos</button>
+                    <button class="nav-btn special-btn" data-section="boaspraticas" onclick="showSection('boaspraticas')"><i class="fa-solid fa-star"></i>&nbsp;Boas Práticas</button>
+                    <button class="nav-btn special-btn" data-section="eletivas" onclick="showSection('eletivas')"><i class="fa-solid fa-palette"></i>&nbsp;Eletivas</button>
+                    <button class="nav-btn special-btn" data-section="eventos" onclick="showSection('eventos')"><i class="fa-solid fa-calendar-star"></i>&nbsp;Eventos</button>
+                    <button class="nav-btn special-btn" data-section="gestao" onclick="showSection('gestao')"><i class="fa-solid fa-users-gear"></i>&nbsp;Gestão</button>
+                    <button class="nav-btn special-btn" data-section="gremio" onclick="showSection('gremio')"><i class="fa-solid fa-user-graduate"></i>&nbsp;Grêmio</button>
+                </div>
+            </nav>
+
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </header>
+
+    <!-- MOBILE OVERLAY E MENU -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" id="mobileClose"><i class="fa-solid fa-times"></i></button>
+        <div style="clear:both; margin-bottom:10px;"></div>
+        <div class="mobile-section-title">📚 Turmas</div>
+        <button class="mobile-nav-btn" data-section="projetos6" onclick="mobileNavClick('projetos6')">6º EF</button>
+        <button class="mobile-nav-btn" data-section="projetos7" onclick="mobileNavClick('projetos7')">7º EF</button>
+        <button class="mobile-nav-btn" data-section="projetos8" onclick="mobileNavClick('projetos8')">8º EF</button>
+        <button class="mobile-nav-btn" data-section="projetos9" onclick="mobileNavClick('projetos9')">9º EF</button>
+        <button class="mobile-nav-btn" data-section="projetos1em" onclick="mobileNavClick('projetos1em')">1º EM</button>
+        <button class="mobile-nav-btn" data-section="projetos2em" onclick="mobileNavClick('projetos2em')">2º EM</button>
+        <button class="mobile-nav-btn" data-section="projetos3em" onclick="mobileNavClick('projetos3em')">3º EM</button>
+        <div class="mobile-section-title">🔧 Acesso Rápido</div>
+        <button class="mobile-nav-btn" data-section="atividades" onclick="mobileNavClick('atividades')">📋 Atividades</button>
+        <button class="mobile-nav-btn" data-section="compensacoes" onclick="mobileNavClick('compensacoes')">📝 Compensações</button>
+        <button class="mobile-nav-btn" data-section="projetoslinks" onclick="mobileNavClick('projetoslinks')">🔗 Projetos (Links)</button>
+        <button class="mobile-nav-btn" data-section="boaspraticas" onclick="mobileNavClick('boaspraticas')">⭐ Boas Práticas</button>
+        <button class="mobile-nav-btn" data-section="eletivas" onclick="mobileNavClick('eletivas')">🎨 Eletivas</button>
+        <button class="mobile-nav-btn" data-section="eventos" onclick="mobileNavClick('eventos')">🎉 Eventos</button>
+        <button class="mobile-nav-btn" data-section="gestao" onclick="mobileNavClick('gestao')">🏫 Gestão</button>
+        <button class="mobile-nav-btn" data-section="gremio" onclick="mobileNavClick('gremio')">🗳️ Grêmio</button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-container">
+
+        <!-- HOME -->
+        <section class="content-section active" id="section-home">
+            <div class="section-header">
+                <h2 class="section-title">🏫 Bem-vindo à E. E. Hans Grudzinski</h2>
+                <p class="section-subtitle">Navegue pelas seções para conhecer nossos projetos, eletivas, eventos e muito mais.</p>
+            </div>
+            <div class="card-grid">
+                <div class="card" onclick="showSection('atividades')" style="cursor:pointer;"><div class="card-body"><span class="card-badge badge-atividade">Atividades</span><h3>📋 Palestras e Workshops</h3></div></div>
+                <div class="card" onclick="showSection('compensacoes')" style="cursor:pointer;"><div class="card-body"><span class="card-badge" style="background:#2c3e50;color:#fff;">Compensações</span><h3>📝 Compensações de Ausência</h3></div></div>
+                <div class="card" onclick="showSection('projetoslinks')" style="cursor:pointer;"><div class="card-body"><span class="card-badge badge-projeto">Projetos</span><h3>🔗 Links de Projetos</h3></div></div>
+                <div class="card" onclick="showSection('boaspraticas')" style="cursor:pointer;"><div class="card-body"><span class="card-badge badge-boaspraticas">Boas Práticas</span><h3>⭐ Práticas Exemplares</h3></div></div>
+                <div class="card" onclick="showSection('eletivas')" style="cursor:pointer;"><div class="card-body"><span class="card-badge badge-eletiva">Eletivas</span><h3>🎨 Eletivas</h3></div></div>
+                <div class="card" onclick="showSection('eventos')" style="cursor:pointer;"><div class="card-body"><span class="card-badge badge-evento">Eventos</span><h3>🎉 Eventos</h3></div></div>
+                <div class="card" onclick="showSection('gestao')" style="cursor:pointer;"><div class="card-body"><span class="card-badge badge-gestao">Gestão</span><h3>🏫 Equipe Gestora</h3></div></div>
+                <div class="card" onclick="showSection('gremio')" style="cursor:pointer;"><div class="card-body"><span class="card-badge badge-gremio">Grêmio</span><h3>🗳️ Grêmio Estudantil</h3></div></div>
+            </div>
+        </section>
+
+        <!-- PROJETOS 6º EF -->
+        <section class="content-section" id="section-projetos6">
+            <div class="section-header"><h2 class="section-title">📚 Projetos — 6º Ano EF</h2></div>
+            <div class="card-grid">
+                <div class="card" onclick="abrirModalProjeto('6ef','portugues')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/port6/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Português</span><h3>Clube da Leitura</h3><p>Leitura compartilhada e resenhas.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('6ef','ciencias')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/cien6/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Ciências</span><h3>Horta Escolar</h3><p>Cultivo e sustentabilidade.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('6ef','matematica')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/mat6/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Matemática</span><h3>Jogos Matemáticos</h3><p>Raciocínio lógico.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('6ef','artes')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/art6/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Artes</span><h3>Mosaico Coletivo</h3><p>Painel reciclável.</p></div></div>
+            </div>
+        </section>
+
+        <!-- PROJETOS 7º EF -->
+        <section class="content-section" id="section-projetos7">
+            <div class="section-header"><h2 class="section-title">📚 Projetos — 7º Ano EF</h2></div>
+            <div class="card-grid">
+                <div class="card" onclick="abrirModalProjeto('7ef','historia')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/hist7/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">História</span><h3>Linha do Tempo Viva</h3><p>Encenação de momentos históricos.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('7ef','ciencias')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/cien7/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Ciências</span><h3>Feira de Astronomia</h3><p>Maquetes e observação.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('7ef','ingles')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/ing7/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Inglês</span><h3>English Theater</h3><p>Peças teatrais em inglês.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('7ef','geografia')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/geo7/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Geografia</span><h3>Mapa Vivo do Brasil</h3><p>Mapa interativo.</p></div></div>
+            </div>
+        </section>
+
+        <!-- PROJETOS 8º EF -->
+        <section class="content-section" id="section-projetos8">
+            <div class="section-header"><h2 class="section-title">📚 Projetos — 8º Ano EF</h2></div>
+            <div class="card-grid">
+                <div class="card" onclick="abrirModalProjeto('8ef','quimica')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/quim8/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Química</span><h3>Laboratório em Casa</h3><p>Experimentos simples.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('8ef','redacao')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/red8/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Redação</span><h3>Jornal Escolar</h3><p>Notícias da escola.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('8ef','matematica')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/mat8/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Matemática</span><h3>Geometria na Prática</h3><p>Sólidos geométricos.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('8ef','edfisica')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/edf8/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Ed. Física</span><h3>Olimpíadas Internas</h3><p>Torneios esportivos.</p></div></div>
+            </div>
+        </section>
+
+        <!-- PROJETOS 9º EF -->
+        <section class="content-section" id="section-projetos9">
+            <div class="section-header"><h2 class="section-title">📚 Projetos — 9º Ano EF</h2></div>
+            <div class="card-grid">
+                <div class="card" onclick="abrirModalProjeto('9ef','fisica')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/fis9/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Física</span><h3>Robótica Básica</h3><p>Introdução à robótica.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('9ef','sociologia')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/soc9/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Sociologia</span><h3>Debates Contemporâneos</h3><p>Ciclo de debates.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('9ef','literatura')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/lit9/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Literatura</span><h3>Sarau Literário</h3><p>Poesia e música.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('9ef','biologia')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/bio9/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Biologia</span><h3>Feira de Saúde</h3><p>Hábitos saudáveis.</p></div></div>
+            </div>
+        </section>
+
+        <!-- PROJETOS 1º EM -->
+        <section class="content-section" id="section-projetos1em">
+            <div class="section-header"><h2 class="section-title">📚 Projetos — 1º Ano EM</h2></div>
+            <div class="card-grid">
+                <div class="card" onclick="abrirModalProjeto('1em','quimica')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/quim1/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Química</span><h3>Química dos Alimentos</h3><p>Composição de industrializados.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('1em','filosofia')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/fil1/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Filosofia</span><h3>Café Filosófico</h3><p>Discussão de temas éticos.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('1em','biologia')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/bio1/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Biologia</span><h3>Biotecnologia</h3><p>Avanços biotecnológicos.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('1em','matematica')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/mat1/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Matemática</span><h3>Estatística no Cotidiano</h3><p>Análise de dados.</p></div></div>
+            </div>
+        </section>
+
+        <!-- PROJETOS 2º EM -->
+        <section class="content-section" id="section-projetos2em">
+            <div class="section-header"><h2 class="section-title">📚 Projetos — 2º Ano EM</h2></div>
+            <div class="card-grid">
+                <div class="card" onclick="abrirModalProjeto('2em','fisica')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/fis2/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Física</span><h3>Energias Renováveis</h3><p>Protótipos solares e eólicos.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('2em','historia')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/hist2/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">História</span><h3>Simulação da ONU</h3><p>Debate de temas globais.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('2em','redacao')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/red2/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Redação</span><h3>Oficina de Redação</h3><p>Preparação para ENEM.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('2em','artes')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/art2/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Artes</span><h3>Mostra Audiovisual</h3><p>Curtas-metragens.</p></div></div>
+            </div>
+        </section>
+
+        <!-- PROJETOS 3º EM -->
+        <section class="content-section" id="section-projetos3em">
+            <div class="section-header"><h2 class="section-title">📚 Projetos — 3º Ano EM</h2></div>
+            <div class="card-grid">
+                <div class="card" onclick="abrirModalProjeto('3em','tcc')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/inter3/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Interdisciplinar</span><h3>TCC</h3><p>Projeto de pesquisa orientado.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('3em','sociologia')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/soc3/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Sociologia</span><h3>Cidadania Ativa</h3><p>Intervenção social.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('3em','quimica')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/quim3/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Química</span><h3>Cosméticos Naturais</h3><p>Produção artesanal.</p></div></div>
+                <div class="card" onclick="abrirModalProjeto('3em','orientacao')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/ori3/400/250');"></div><div class="card-body"><span class="card-badge badge-projeto">Orientação</span><h3>Feira de Profissões</h3><p>Profissionais convidados.</p></div></div>
+            </div>
+        </section>
+
+        <!-- ATIVIDADES -->
+        <section class="content-section" id="section-atividades">
+            <div class="section-header"><h2 class="section-title">📋 Atividades — Palestras e Workshops</h2></div>
+            <div class="card-grid">
+                <div class="card" onclick="abrirModalGenerico('atividade','saude-mental')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/pal1/400/250');"></div><div class="card-body"><span class="card-badge badge-atividade">Palestra</span><h3>🧠 Saúde Mental</h3><p>Ansiedade e bem-estar.</p><a href="#" class="card-link" target="_blank" onclick="event.stopPropagation();"><i class="fa-brands fa-google-drive"></i> Material</a></div></div>
+                <div class="card" onclick="abrirModalGenerico('atividade','programacao')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/pal2/400/250');"></div><div class="card-body"><span class="card-badge badge-atividade">Workshop</span><h3>💻 Programação</h3><p>Lógica com Scratch.</p><a href="#" class="card-link" onclick="event.stopPropagation();"><i class="fa-brands fa-google-drive"></i> Material</a></div></div>
+                <div class="card" onclick="abrirModalGenerico('atividade','sustentabilidade')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/pal3/400/250');"></div><div class="card-body"><span class="card-badge badge-atividade">Mesa Redonda</span><h3>🌍 Sustentabilidade</h3><p>Preservação ambiental.</p><a href="#" class="card-link" onclick="event.stopPropagation();"><i class="fa-brands fa-google-drive"></i> Material</a></div></div>
+                <div class="card" onclick="abrirModalGenerico('atividade','oratoria')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/pal4/400/250');"></div><div class="card-body"><span class="card-badge badge-atividade">Oficina</span><h3>🎤 Oratória</h3><p>Comunicação e expressão.</p><a href="#" class="card-link" onclick="event.stopPropagation();"><i class="fa-brands fa-google-drive"></i> Material</a></div></div>
+            </div>
+        </section>
+
+        <!-- COMPENSAÇÕES -->
+        <section class="content-section" id="section-compensacoes">
+            <div class="section-header"><h2 class="section-title">📝 Compensações de Ausência</h2></div>
+            <div class="compensacao-download-area">
+                <h3 style="font-family:var(--font-heading);">📥 Baixar Compensação para Impressão</h3>
+                <p style="color:var(--text-light);">Selecione a turma para baixar a atividade.</p>
+                <div class="download-selector">
+                    <select id="serieCompensacao" onchange="atualizarLinkCompensacao()">
+                        <option value="">-- Selecione a turma --</option>
+                        <option value="6ef">6º Ano EF</option><option value="7ef">7º Ano EF</option><option value="8ef">8º Ano EF</option><option value="9ef">9º Ano EF</option>
+                        <option value="1em">1º Ano EM</option><option value="2em">2º Ano EM</option><option value="3em">3º Ano EM</option>
+                    </select>
+                    <a id="linkDownloadCompensacao" href="#" class="btn-download" target="_blank" onclick="return validarLinkCompensacao()"><i class="fa-solid fa-download"></i> Baixar</a>
+                </div>
+                <small style="color:#e74c3c;" id="avisoCompensacao"></small>
+            </div>
+            <!-- ÁREA DE IMAGEM GRANDE (substitui a tabela) -->
+            <div class="compensacao-imagem-area" style="background: var(--white); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); text-align: center; margin-top: 24px;">
+                <h3 style="font-family:var(--font-heading); margin-bottom:16px;">🖼️ Informações sobre Compensação</h3>
+                <img src="https://via.placeholder.com/900x500?text=Imagem+Informativa+de+Compensação" alt="Informações sobre Compensação de Ausência" style="max-width:100%; border-radius:12px;">
+                <p style="margin-top:16px; color:var(--text-light); font-size:0.9rem;">
+                    <i class="fa-solid fa-info-circle"></i> Esta imagem contém orientações importantes sobre o processo de compensação de ausências. 
+                    Para mais detalhes, entre em contato com a secretaria da escola.
+                </p>
+            </div>
+        </section>
+
+        <!-- PROJETOS LINKS -->
+        <section class="content-section" id="section-projetoslinks">
+            <div class="section-header"><h2 class="section-title">🔗 Projetos — Links por Série</h2><p class="section-subtitle">Acesse os projetos no Google Drive separados por Fundamental e Médio</p></div>
+            <h3 style="color:#1a5c8a; margin:20px 0 12px;">📘 Ensino Fundamental II</h3>
+            <div class="card-grid">
+                <div class="card"><div class="card-body"><span class="card-badge badge-projeto">6º Ano</span><h3>Projetos 6º EF</h3><a href="#" class="card-link" target="_blank"><i class="fa-brands fa-google-drive"></i> Acessar Drive</a></div></div>
+                <div class="card"><div class="card-body"><span class="card-badge badge-projeto">7º Ano</span><h3>Projetos 7º EF</h3><a href="#" class="card-link" target="_blank"><i class="fa-brands fa-google-drive"></i> Acessar Drive</a></div></div>
+                <div class="card"><div class="card-body"><span class="card-badge badge-projeto">8º Ano</span><h3>Projetos 8º EF</h3><a href="#" class="card-link" target="_blank"><i class="fa-brands fa-google-drive"></i> Acessar Drive</a></div></div>
+                <div class="card"><div class="card-body"><span class="card-badge badge-projeto">9º Ano</span><h3>Projetos 9º EF</h3><a href="#" class="card-link" target="_blank"><i class="fa-brands fa-google-drive"></i> Acessar Drive</a></div></div>
+            </div>
+            <h3 style="color:#1a5c8a; margin:28px 0 12px;">📗 Ensino Médio</h3>
+            <div class="card-grid">
+                <div class="card"><div class="card-body"><span class="card-badge badge-projeto">1º Ano</span><h3>Projetos 1º EM</h3><a href="#" class="card-link" target="_blank"><i class="fa-brands fa-google-drive"></i> Acessar Drive</a></div></div>
+                <div class="card"><div class="card-body"><span class="card-badge badge-projeto">2º Ano</span><h3>Projetos 2º EM</h3><a href="#" class="card-link" target="_blank"><i class="fa-brands fa-google-drive"></i> Acessar Drive</a></div></div>
+                <div class="card"><div class="card-body"><span class="card-badge badge-projeto">3º Ano</span><h3>Projetos 3º EM</h3><a href="#" class="card-link" target="_blank"><i class="fa-brands fa-google-drive"></i> Acessar Drive</a></div></div>
+            </div>
+        </section>
+
+        <!-- BOAS PRÁTICAS -->
+        <section class="content-section" id="section-boaspraticas">
+            <div class="section-header"><h2 class="section-title">⭐ Boas Práticas</h2></div>
+            <div class="card-grid">
+                <div class="card" onclick="abrirModalGenerico('boaspraticas','coleta-seletiva')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/bp1/400/250');"></div><div class="card-body"><span class="card-badge badge-boaspraticas">Sustentabilidade</span><h3>🌱 Coleta Seletiva</h3><p>Reciclagem e conscientização.</p></div></div>
+                <div class="card" onclick="abrirModalGenerico('boaspraticas','aluno-monitor')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/bp2/400/250');"></div><div class="card-body"><span class="card-badge badge-boaspraticas">Inclusão</span><h3>🤝 Aluno Monitor</h3><p>Auxílio entre colegas.</p></div></div>
+                <div class="card" onclick="abrirModalGenerico('boaspraticas','pausa-ativa')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/bp3/400/250');"></div><div class="card-body"><span class="card-badge badge-boaspraticas">Saúde</span><h3>🧘 Pausa Ativa</h3><p>Alongamento em sala.</p></div></div>
+                <div class="card" onclick="abrirModalGenerico('boaspraticas','clube-livro')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/bp4/400/250');"></div><div class="card-body"><span class="card-badge badge-boaspraticas">Cultura</span><h3>📖 Clube do Livro</h3><p>Encontros literários.</p></div></div>
+            </div>
+        </section>
+
+        <!-- ELETIVAS -->
+        <section class="content-section" id="section-eletivas">
+            <div class="section-header"><h2 class="section-title">🎨 Eletivas</h2></div>
+            <div class="card-grid">
+                <div class="card" onclick="abrirModalGenerico('eletiva','robotica')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/elet1/400/250');"></div><div class="card-body"><span class="card-badge badge-eletiva">Tecnologia</span><h3>🤖 Robótica</h3><p>LEGO e Arduino.</p></div></div>
+                <div class="card" onclick="abrirModalGenerico('eletiva','teatro')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/elet2/400/250');"></div><div class="card-body"><span class="card-badge badge-eletiva">Artes</span><h3>🎭 Teatro</h3><p>Interpretação e montagem.</p></div></div>
+                <div class="card" onclick="abrirModalGenerico('eletiva','coral')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/elet3/400/250');"></div><div class="card-body"><span class="card-badge badge-eletiva">Música</span><h3>🎵 Coral</h3><p>Canto e instrumentos.</p></div></div>
+                <div class="card" onclick="abrirModalGenerico('eletiva','volei')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/elet4/400/250');"></div><div class="card-body"><span class="card-badge badge-eletiva">Esportes</span><h3>🏐 Vôlei</h3><p>Treinamento e torneios.</p></div></div>
+                <div class="card" onclick="abrirModalGenerico('eletiva','espanhol')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/elet5/400/250');"></div><div class="card-body"><span class="card-badge badge-eletiva">Idiomas</span><h3>🗣️ Espanhol</h3><p>Conversação.</p></div></div>
+                <div class="card" onclick="abrirModalGenerico('eletiva','empreendedorismo')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/elet6/400/250');"></div><div class="card-body"><span class="card-badge badge-eletiva">Empreendedorismo</span><h3>💡 Jovens Empreendedores</h3><p>Projetos sociais.</p></div></div>
+            </div>
+            <div class="video-container"><div class="video-placeholder-box" onclick="alert('Insira o iframe do vídeo')"><i class="fa-solid fa-play-circle"></i><span>Vídeo das Eletivas</span></div></div>
+        </section>
+
+        <!-- EVENTOS -->
+        <section class="content-section" id="section-eventos">
+            <div class="section-header"><h2 class="section-title">🎉 Eventos Escolares</h2></div>
+            <div class="card-grid">
+                <div class="card" onclick="abrirModalGenerico('evento','festa-junina')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/ev1/400/250');"></div><div class="card-body"><span class="card-badge badge-evento">Junho</span><h3>🎪 Festa Junina</h3></div></div>
+                <div class="card" onclick="abrirModalGenerico('evento','mostra-cultural')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/ev2/400/250');"></div><div class="card-body"><span class="card-badge badge-evento">Agosto</span><h3>📚 Mostra Cultural</h3></div></div>
+                <div class="card" onclick="abrirModalGenerico('evento','olimpiadas')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/ev3/400/250');"></div><div class="card-body"><span class="card-badge badge-evento">Outubro</span><h3>🏅 Olimpíadas</h3></div></div>
+                <div class="card" onclick="abrirModalGenerico('evento','dia-familia')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/ev4/400/250');"></div><div class="card-body"><span class="card-badge badge-evento">Novembro</span><h3>👨‍👩‍👧‍👦 Dia da Família</h3></div></div>
+                <div class="card" onclick="abrirModalGenerico('evento','formatura')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/ev5/400/250');"></div><div class="card-body"><span class="card-badge badge-evento">Dezembro</span><h3>🎓 Formatura</h3></div></div>
+                <div class="card" onclick="abrirModalGenerico('evento','meio-ambiente')"><div class="card-image" style="background-image:url('https://picsum.photos/seed/ev6/400/250');"></div><div class="card-body"><span class="card-badge badge-evento">Março</span><h3>🌍 Meio Ambiente</h3></div></div>
+            </div>
+            <div class="video-container"><div class="video-placeholder-box" onclick="alert('Insira o iframe do vídeo')"><i class="fa-solid fa-play-circle"></i><span>Vídeo dos Eventos</span></div></div>
+        </section>
+
+        <!-- GESTÃO -->
+        <section class="content-section" id="section-gestao">
+            <div class="section-header"><h2 class="section-title">🏫 Gestão da Escola</h2></div>
+            <div class="card-grid">
+                <div class="card"><div class="card-image circle" style="background-image:url('https://picsum.photos/seed/dir/200/200');"></div><div class="card-body" style="text-align:center;"><span class="card-badge badge-gestao">Direção</span><h3>Profª. Maria Helena</h3><p><strong>Diretora</strong></p></div></div>
+                <div class="card"><div class="card-image circle" style="background-image:url('https://picsum.photos/seed/coordef/200/200');"></div><div class="card-body" style="text-align:center;"><span class="card-badge badge-gestao">Coordenação</span><h3>Prof. Carlos Andrade</h3><p><strong>Coordenador EF</strong></p></div></div>
+                <div class="card"><div class="card-image circle" style="background-image:url('https://picsum.photos/seed/coordem/200/200');"></div><div class="card-body" style="text-align:center;"><span class="card-badge badge-gestao">Coordenação</span><h3>Profª. Ana Beatriz</h3><p><strong>Coordenadora EM</strong></p></div></div>
+                <div class="card"><div class="card-image circle" style="background-image:url('https://picsum.photos/seed/sec/200/200');"></div><div class="card-body" style="text-align:center;"><span class="card-badge badge-gestao">Secretaria</span><h3>Secretaria Escolar</h3><p>Atendimento e documentos.</p></div></div>
+            </div>
+        </section>
+
+        <!-- GRÊMIO -->
+        <section class="content-section" id="section-gremio">
+            <div class="section-header"><h2 class="section-title">🗳️ Grêmio Estudantil</h2></div>
+            <div class="card-grid">
+                <div class="card"><div class="card-image circle" style="background-image:url('https://picsum.photos/seed/grem1/200/200');"></div><div class="card-body" style="text-align:center;"><span class="card-badge badge-gremio">Presidência</span><h3>Lucas Fernandes</h3><p><strong>Presidente</strong> — 3º EM</p></div></div>
+                <div class="card"><div class="card-image circle" style="background-image:url('https://picsum.photos/seed/grem2/200/200');"></div><div class="card-body" style="text-align:center;"><span class="card-badge badge-gremio">Vice</span><h3>Julia Santana</h3><p><strong>Vice-presidente</strong> — 2º EM</p></div></div>
+                <div class="card"><div class="card-image circle" style="background-image:url('https://picsum.photos/seed/grem3/200/200');"></div><div class="card-body" style="text-align:center;"><span class="card-badge badge-gremio">Secretaria</span><h3>Pedro Alves</h3><p><strong>Secretário</strong> — 1º EM</p></div></div>
+                <div class="card"><div class="card-image circle" style="background-image:url('https://picsum.photos/seed/grem4/200/200');"></div><div class="card-body" style="text-align:center;"><span class="card-badge badge-gremio">Comunicação</span><h3>Marina Costa</h3><p><strong>Relações Públicas</strong> — 9º EF</p></div></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL GENÉRICO -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-container">
+            <button class="modal-close" onclick="fecharModal()"><i class="fa-solid fa-times"></i></button>
+            <div class="modal-header">
+                <span class="card-badge" id="modalBadge">Categoria</span>
+                <h2 id="modalTitle">Título</h2>
+                <div class="turma-selector" id="turmaSelector">
+                    <button class="turma-opt active" data-turma="A" onclick="selecionarTurmaModal('A', this)">Turma A</button>
+                    <button class="turma-opt" data-turma="B" onclick="selecionarTurmaModal('B', this)">Turma B</button>
+                    <button class="turma-opt" data-turma="C" onclick="selecionarTurmaModal('C', this)">Turma C</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-gallery" id="modalGallery"></div>
+                <div class="modal-video" id="modalVideo"></div>
+                <div class="modal-text" id="modalText"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 <strong>E. E. Hans Grudzinski</strong> — Todos os direitos reservados.</p>
+        <p style="margin-top:4px; font-size:0.78rem;">📍 Rua Exemplo, 123 — Bairro Centro — Cidade/UF | 📞 (11) 4545-5601 | ✉️ contato@hansgrudzinski.edu.br</p>
+    </footer>
+
+    <script>
+        const sectionMap = {
+            'home': 'section-home',
+            'projetos6': 'section-projetos6', 'projetos7': 'section-projetos7', 'projetos8': 'section-projetos8', 'projetos9': 'section-projetos9',
+            'projetos1em': 'section-projetos1em', 'projetos2em': 'section-projetos2em', 'projetos3em': 'section-projetos3em',
+            'atividades': 'section-atividades', 'compensacoes': 'section-compensacoes', 'projetoslinks': 'section-projetoslinks',
+            'boaspraticas': 'section-boaspraticas', 'eletivas': 'section-eletivas', 'eventos': 'section-eventos',
+            'gestao': 'section-gestao', 'gremio': 'section-gremio'
+        };
+
+        const linksCompensacao = {
+            '6ef': '#', '7ef': '#', '8ef': '#', '9ef': '#', '1em': '#', '2em': '#', '3em': '#'
+        };
+
+        // Estado do modal de projeto
+        let currentProjetoAno = null;
+        let currentProjetoId = null;
+        let currentTurma = 'A';
+
+        function showSection(sectionKey) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+            const targetId = sectionMap[sectionKey];
+            if (targetId) {
+                document.getElementById(targetId).classList.add('active');
+                document.querySelector('.main-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            document.querySelectorAll('.desktop-nav .nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-section') === sectionKey) btn.classList.add('active');
+            });
+            document.querySelectorAll('.mobile-menu .mobile-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-section') === sectionKey) btn.classList.add('active');
+            });
+            closeMobileMenu();
+        }
+
+        function atualizarLinkCompensacao() {
+            const select = document.getElementById('serieCompensacao');
+            const link = document.getElementById('linkDownloadCompensacao');
+            const aviso = document.getElementById('avisoCompensacao');
+            const serie = select.value;
+            if (serie && linksCompensacao[serie]) {
+                link.href = linksCompensacao[serie];
+                aviso.textContent = '';
+            } else {
+                link.href = '#';
+                aviso.textContent = 'Selecione uma turma.';
+            }
+        }
+
+        function validarLinkCompensacao() {
+            const select = document.getElementById('serieCompensacao');
+            const aviso = document.getElementById('avisoCompensacao');
+            if (!select.value) { aviso.textContent = 'Selecione uma turma antes de baixar.'; return false; }
+            if (document.getElementById('linkDownloadCompensacao').href === '#' || document.getElementById('linkDownloadCompensacao').href.endsWith('#')) {
+                aviso.textContent = 'Link ainda não configurado para esta turma.';
+                return false;
+            }
+            return true;
+        }
+
+        // MODAL FUNCTIONS
+        function fecharModal() {
+            document.getElementById('modalOverlay').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function abrirModal() {
+            document.getElementById('modalOverlay').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Modal para cards genéricos (Atividades, Boas Práticas, Eletivas, Eventos)
+        function abrirModalGenerico(tipo, id) {
+            const modal = document.getElementById('modalOverlay');
+            const badge = document.getElementById('modalBadge');
+            const title = document.getElementById('modalTitle');
+            const gallery = document.getElementById('modalGallery');
+            const video = document.getElementById('modalVideo');
+            const text = document.getElementById('modalText');
+            const turmaSelector = document.getElementById('turmaSelector');
+
+            // Esconder seletor de turma para cards genéricos
+            turmaSelector.classList.remove('active');
+            currentProjetoAno = null;
+
+            // Dados simulados
+            const conteudo = {
+                'atividade-saude-mental': { badge:'Palestra', title:'🧠 Saúde Mental', texto:'Palestra sobre ansiedade e bem-estar no ambiente escolar, realizada em parceria com psicólogos convidados.' },
+                'atividade-programacao': { badge:'Workshop', title:'💻 Programação', texto:'Oficina de lógica de programação utilizando Scratch para alunos do Fundamental II.' },
+                'atividade-sustentabilidade': { badge:'Mesa Redonda', title:'🌍 Sustentabilidade', texto:'Discussão sobre preservação ambiental e consumo consciente com convidados da ONG Verde Vida.' },
+                'atividade-oratoria': { badge:'Oficina', title:'🎤 Oratória', texto:'Técnicas de comunicação e expressão para apresentações em público.' },
+                'boaspraticas-coleta-seletiva': { badge:'Sustentabilidade', title:'🌱 Coleta Seletiva', texto:'Projeto de reciclagem e conscientização ambiental com lixeiras coloridas em toda a escola.' },
+                'boaspraticas-aluno-monitor': { badge:'Inclusão', title:'🤝 Aluno Monitor', texto:'Programa de auxílio entre colegas onde alunos auxiliam outros com dificuldades de aprendizagem.' },
+                'boaspraticas-pausa-ativa': { badge:'Saúde', title:'🧘 Pausa Ativa', texto:'Momentos de alongamento e relaxamento durante as aulas para melhorar a concentração.' },
+                'boaspraticas-clube-livro': { badge:'Cultura', title:'📖 Clube do Livro', texto:'Encontros literários mensais com discussão de obras escolhidas pelos alunos.' },
+                'eletiva-robotica': { badge:'Tecnologia', title:'🤖 Robótica', texto:'Eletiva de robótica com kits LEGO e Arduino para desenvolvimento de protótipos.' },
+                'eletiva-teatro': { badge:'Artes', title:'🎭 Teatro', texto:'Aulas de interpretação e montagem de peças teatrais com apresentação semestral.' },
+                'eletiva-coral': { badge:'Música', title:'🎵 Coral', texto:'Coral escolar com prática de canto e instrumentos musicais.' },
+                'eletiva-volei': { badge:'Esportes', title:'🏐 Vôlei', texto:'Treinamento de vôlei com participação em torneios interescolares.' },
+                'eletiva-espanhol': { badge:'Idiomas', title:'🗣️ Espanhol', texto:'Aulas de conversação em espanhol com foco em fluência.' },
+                'eletiva-empreendedorismo': { badge:'Empreendedorismo', title:'💡 Jovens Empreendedores', texto:'Desenvolvimento de projetos sociais com viés empreendedor.' },
+                'evento-festa-junina': { badge:'Junho', title:'🎪 Festa Junina', texto:'Festa junina com barracas típicas, danças e comidas regionais.' },
+                'evento-mostra-cultural': { badge:'Agosto', title:'📚 Mostra Cultural', texto:'Exposição de trabalhos e projetos desenvolvidos ao longo do semestre.' },
+                'evento-olimpiadas': { badge:'Outubro', title:'🏅 Olimpíadas', texto:'Competições esportivas entre turmas com diversas modalidades.' },
+                'evento-dia-familia': { badge:'Novembro', title:'👨‍👩‍👧‍👦 Dia da Família', texto:'Evento de integração entre família e escola com atividades lúdicas.' },
+                'evento-formatura': { badge:'Dezembro', title:'🎓 Formatura', texto:'Cerimônia de formatura dos alunos do 9º EF e 3º EM.' },
+                'evento-meio-ambiente': { badge:'Março', title:'🌍 Meio Ambiente', texto:'Semana do meio ambiente com palestras, plantio de árvores e oficinas.' }
+            };
+
+            const chave = tipo + '-' + id;
+            const dados = conteudo[chave] || { badge: tipo, title: id, texto: 'Conteúdo em breve.' };
+
+            badge.textContent = dados.badge;
+            badge.className = 'card-badge';
+            if (tipo === 'atividade') badge.classList.add('badge-atividade');
+            else if (tipo === 'boaspraticas') badge.classList.add('badge-boaspraticas');
+            else if (tipo === 'eletiva') badge.classList.add('badge-eletiva');
+            else if (tipo === 'evento') badge.classList.add('badge-evento');
+
+            title.textContent = dados.title;
+
+            // Galeria de fotos placeholder
+            gallery.innerHTML = `
+                <div class="photo-placeholder" style="background-image:url('https://picsum.photos/seed/${id}1/400/300'); background-size:cover; border:2px solid #c0cdda;"></div>
+                <div class="photo-placeholder" style="background-image:url('https://picsum.photos/seed/${id}2/400/300'); background-size:cover; border:2px solid #c0cdda;"></div>
+                <div class="photo-placeholder" style="background-image:url('https://picsum.photos/seed/${id}3/400/300'); background-size:cover; border:2px solid #c0cdda;"></div>
+                <div class="photo-placeholder" style="background-image:url('https://picsum.photos/seed/${id}4/400/300'); background-size:cover; border:2px solid #c0cdda;"></div>
+            `;
+
+            // Vídeo placeholder
+            video.innerHTML = `
+                <div class="video-container">
+                    <div class="video-placeholder-box" onclick="alert('Insira o iframe do vídeo aqui')">
+                        <i class="fa-solid fa-play-circle"></i><span>Clique para assistir ao vídeo</span>
+                    </div>
+                </div>
+            `;
+
+            text.innerHTML = `<p>${dados.texto}</p>
+            <p style="color:var(--text-light); margin-top:10px;"><em>Mais informações em breve. Fique atento aos comunicados da escola.</em></p>`;
+
+            abrirModal();
+        }
+
+        // Modal para projetos com seleção de turmas
+        function abrirModalProjeto(ano, projetoId) {
+            const turmaSelector = document.getElementById('turmaSelector');
+            // Ativar seletor de turmas
+            turmaSelector.classList.add('active');
+            currentProjetoAno = ano;
+            currentProjetoId = projetoId;
+            currentTurma = 'A';
+            // Reset botões de turma
+            document.querySelectorAll('#turmaSelector .turma-opt').forEach((btn, i) => {
+                btn.classList.toggle('active', i === 0);
+            });
+            atualizarConteudoProjeto();
+            abrirModal();
+        }
+
+        function selecionarTurmaModal(turma, btn) {
+            currentTurma = turma;
+            document.querySelectorAll('#turmaSelector .turma-opt').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            atualizarConteudoProjeto();
+        }
+
+        function atualizarConteudoProjeto() {
+            const badge = document.getElementById('modalBadge');
+            const title = document.getElementById('modalTitle');
+            const gallery = document.getElementById('modalGallery');
+            const video = document.getElementById('modalVideo');
+            const text = document.getElementById('modalText');
+
+            const anoLabels = {
+                '6ef': '6º Ano EF', '7ef': '7º Ano EF', '8ef': '8º Ano EF', '9ef': '9º Ano EF',
+                '1em': '1º Ano EM', '2em': '2º Ano EM', '3em': '3º Ano EM'
+            };
+            const anoLabel = anoLabels[currentProjetoAno] || currentProjetoAno;
+
+            const projetoLabels = {
+                'portugues': 'Português', 'ciencias': 'Ciências', 'matematica': 'Matemática', 'artes': 'Artes',
+                'historia': 'História', 'ingles': 'Inglês', 'geografia': 'Geografia', 'quimica': 'Química',
+                'redacao': 'Redação', 'edfisica': 'Ed. Física', 'fisica': 'Física', 'sociologia': 'Sociologia',
+                'literatura': 'Literatura', 'biologia': 'Biologia', 'filosofia': 'Filosofia', 'tcc': 'Interdisciplinar',
+                'orientacao': 'Orientação'
+            };
+            const projetoLabel = projetoLabels[currentProjetoId] || currentProjetoId;
+
+            badge.textContent = 'Projeto';
+            badge.className = 'card-badge badge-projeto';
+            title.textContent = `${projetoLabel} — ${anoLabel} Turma ${currentTurma}`;
+
+            // Galeria placeholder específica
+            const seedBase = currentProjetoAno + currentProjetoId + currentTurma;
+            gallery.innerHTML = `
+                <div class="photo-placeholder" style="background-image:url('https://picsum.photos/seed/${seedBase}1/400/300'); background-size:cover; border:2px solid #c0cdda;"></div>
+                <div class="photo-placeholder" style="background-image:url('https://picsum.photos/seed/${seedBase}2/400/300'); background-size:cover; border:2px solid #c0cdda;"></div>
+                <div class="photo-placeholder" style="background-image:url('https://picsum.photos/seed/${seedBase}3/400/300'); background-size:cover; border:2px solid #c0cdda;"></div>
+                <div class="photo-placeholder" style="background-image:url('https://picsum.photos/seed/${seedBase}4/400/300'); background-size:cover; border:2px solid #c0cdda;"></div>
+            `;
+
+            video.innerHTML = `
+                <div class="video-container">
+                    <div class="video-placeholder-box" onclick="alert('Insira o iframe do vídeo do projeto aqui')">
+                        <i class="fa-solid fa-play-circle"></i><span>Vídeo do Projeto — ${anoLabel} Turma ${currentTurma}</span>
+                    </div>
+                </div>
+            `;
+
+            text.innerHTML = `<p><strong>Projeto de ${projetoLabel}</strong> desenvolvido pela turma <strong>${currentTurma}</strong> do <strong>${anoLabel}</strong>.</p>
+            <p style="color:var(--text-light); margin-top:10px;">Este projeto tem como objetivo engajar os alunos em atividades práticas e colaborativas, promovendo o aprendizado significativo.</p>
+            <p style="color:var(--text-light);"><em>Mais detalhes e materiais complementares em breve.</em></p>`;
+        }
+
+        // Mobile
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const mobileClose = document.getElementById('mobileClose');
+        function openMobileMenu() { mobileMenu.classList.add('open'); mobileOverlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+        function closeMobileMenu() { mobileMenu.classList.remove('open'); mobileOverlay.classList.remove('show'); document.body.style.overflow = ''; }
+        mobileToggle.addEventListener('click', openMobileMenu);
+        mobileClose.addEventListener('click', closeMobileMenu);
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+        function mobileNavClick(sectionKey) { showSection(sectionKey); closeMobileMenu(); }
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { fecharModal(); closeMobileMenu(); } });
+        document.querySelector('.logo-area').addEventListener('click', function() { showSection('home'); });
+        // Fechar modal ao clicar fora
+        document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) fecharModal(); });
+    </script>
+</body>
+</html>
